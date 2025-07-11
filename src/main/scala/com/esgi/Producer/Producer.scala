@@ -14,11 +14,12 @@ object ProducerKafka {
   def main(args: Array[String]): Unit = {
 
     /* --------- Paramètres --------- */
-    val useAPI      = true          // false ⇒ lit food.parquet
-    val jsonPath    = "data/food.parquet" // fichier de teste 
-    val batchLength = 100
-    val maxOffset   = 3808300          // pour tester après on fait 3808300 ensuite
-    val topic       = "openfood"
+    val useAPI      = sys.env.getOrElse("USE_API", "true").toBoolean
+    val batchLength = sys.env.getOrElse("BATCH_LENGTH", "100").toInt
+    val maxOffset   = sys.env.getOrElse("MAX_OFFSET", "3808300").toInt
+    val jsonPath = sys.env.getOrElse("JSON_PATH", "data/food.parquet")
+    val topic    = sys.env.getOrElse("TOPIC", "openfood")
+
     val bootstrap = sys.env.getOrElse("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
 
     /*Config Kafka */
