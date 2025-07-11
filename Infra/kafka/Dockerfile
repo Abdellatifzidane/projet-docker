@@ -15,11 +15,8 @@ RUN curl -fsSL https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SC
 ENV KAFKA_HOME=/opt/kafka
 WORKDIR ${KAFKA_HOME}
 
-# ─── ta conf perso ────────────────────────────────────────────────
 COPY server.properties  config/server.properties
 
-# ─── port exposé ──────────────────────────────────────────────────
 EXPOSE 9092
 
-# ─── lancement au 1ᵉʳ plan ───────────────────────────────────────
 CMD ["bash","-c","exec $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties"]
