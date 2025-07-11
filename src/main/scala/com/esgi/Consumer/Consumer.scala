@@ -78,6 +78,7 @@ object ConsumerKafka {
   transformed
     .groupBy("nutriscore")
     .agg(count("*").as("product_count"))
+    
 }
 
 def writeToPostgres(df: DataFrame): Unit = {

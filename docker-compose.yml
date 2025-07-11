@@ -64,12 +64,10 @@ services:
       - ./Infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - ./logs/postgres:/var/log/postgres
     environment:
-      POSTGRES_DB: openfood
-      POSTGRES_USER: ingest
-      POSTGRES_PASSWORD: ingestpwd
-      POSTGRES_LOGGING_COLLECTOR: "on"
-      POSTGRES_LOG_DEST: stderr
-      POSTGRES_LOG_DIRECTORY: /var/log/postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     ports: ["5433:5432"]
     logging:                             
       driver: "json-file"
@@ -84,11 +82,16 @@ services:
     container_name: producer
     depends_on: [kafka]
     networks: [backend-net]
+    
     environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      USE_API: "true"
-      BATCH_LENGTH: "100"
-      MAX_OFFSET: "3808300"
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      USE_API: ${USE_API}
+      BATCH_LENGTH: ${BATCH_LENGTH}
+      MAX_OFFSET: ${MAX_OFFSET}
+      JSON_PATH: ${JSON_PATH}
+      TOPIC: ${TOPIC}
+
+
     volumes:
       - ./data:/app/data
       - ./logs/producer:/var/log/producer
@@ -106,12 +109,14 @@ services:
     container_name: consumer
     depends_on: [kafka, postgres]
     networks: [backend-net]
+    
     environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      CHECKPOINT_PATH: /checkpoint/generic
-      PG_URL: jdbc:postgresql://postgres:5432/openfood
-      PG_USER: ingest
-      PG_PWD: ingestpwd
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      CHECKPOINT_PATH: ${CHECKPOINT_PATH}
+      PG_URL: ${PG_URL}
+      PG_USER: ${PG_USER}
+      PG_PWD: ${PG_PWD}
+
     volumes:
       - checkpoint:/checkpoint
       - ./logs/consumer:/var/log/consumer

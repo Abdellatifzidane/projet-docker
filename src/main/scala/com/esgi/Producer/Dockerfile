@@ -16,10 +16,6 @@ WORKDIR /app
 COPY --from=builder /build/target/spark-streaming-project-1.0-SNAPSHOT.jar /app/producer.jar
 
 
-ENV KAFKA_BOOTSTRAP_SERVERS=kafka:9092 \
-    USE_API=true \
-    BATCH_LENGTH=100 \
-    MAX_OFFSET=3808300 \
-    JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m"
+ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m"
 
 ENTRYPOINT ["java","-jar","/app/producer.jar"]

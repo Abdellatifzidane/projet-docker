@@ -20,8 +20,6 @@ ENV PATH=$SPARK_HOME/bin:$PATH
 
 COPY --from=builder /build/target/spark-streaming-project-1.0-SNAPSHOT.jar consumer.jar
 
-ENV KAFKA_BOOTSTRAP_SERVERS=kafka:9092 \
-    CHECKPOINT_PATH=/checkpoint/generic
 
 ENTRYPOINT ["spark-submit", \
     "--packages","org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.postgresql:postgresql:42.6.0",\
